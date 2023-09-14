@@ -1,11 +1,14 @@
 package org.example;
 
+import lombok.Getter;
+
 import java.io.Serializable;
 
 public class GameProgress implements Serializable {
     private static final long serialVersionUID = 1L;
     private final int health;
     private final int weapons;
+    @Getter
     private final int lvl;
     private final double distance;
 
