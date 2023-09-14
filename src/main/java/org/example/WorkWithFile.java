@@ -1,21 +1,25 @@
 package org.example;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
+@NoArgsConstructor
+@AllArgsConstructor
 public class WorkWithFile {
+    @Setter
     private String urlGames = "C://Games";
-
-    public void setUrlGames(String urlGames) {
-        this.urlGames = urlGames;
-    }
 
     public String createFile(String urlFile) {
         File file = new File(urlGames, urlFile);
         try {
-            file.createNewFile();
-            return "Файл " + file.getName() + " успешно создан\n";
+            if (file.createNewFile()){
+                return "Файл " + file.getName() + " успешно создан\n";
+            }
+            return "Файл " + file.getName() + "не удалось сохранить";
         } catch (IOException e) {
             return "Ошибка загрузки файла " + e.getMessage();
         }
