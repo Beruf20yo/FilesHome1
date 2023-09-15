@@ -1,4 +1,4 @@
-package tasks;
+package tasks.junit;
 
 import org.example.tasks.TaskOne;
 import org.junit.jupiter.api.Assertions;
