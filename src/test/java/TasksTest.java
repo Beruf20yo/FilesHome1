@@ -3,39 +3,30 @@ import org.example.tasks.Task;
 import org.example.tasks.TaskOne;
 import org.example.tasks.TaskThree;
 import org.example.tasks.TaskTwo;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.CleanupMode;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 
 public class TasksTest {
-    @AfterAll
-    static void clearAll(){
-        List<String> dirs = new ArrayList<>(List.of("C://Games//temp","C://Games//res",
-                "C://Games//savegames","C://Games//src"));
-
-        for(String fileUrl : dirs){
-            deleteDirectory(new File(fileUrl));
-        }
-    }
-
-    static void deleteDirectory(File directory) {
-        File[] contents = directory.listFiles();
-        if (contents != null) {
-            for (File file : contents) {
-                deleteDirectory(file);
-            }
-        }
-        directory.delete();
+    @TempDir(cleanup = CleanupMode.DEFAULT)
+    static
+    Path tempDir;
+    static String urlGames;
+    @BeforeAll
+    static void createTempDirUrl(){
+        urlGames = tempDir.toFile().getPath();
     }
     @Test
     void taskOne(){
-        TaskOne taskOne = new TaskOne("C://Games");
+        TaskOne taskOne = new TaskOne(urlGames);
         Assertions.assertEquals("Информация успешно записана в файл",taskOne.makeTask());
         StringBuilder sb = new StringBuilder();
         String answers = """
@@ -52,7 +43,7 @@ public class TasksTest {
                 Файл Main.java успешно создан
                 Файл Utils.java успешно создан
                 """;
-        try (BufferedReader reader = new BufferedReader(new FileReader("C://Games/temp/temp.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(tempDir.toFile().getPath()+"/temp/temp.txt"))) {
             String line = reader.readLine();
             while (line != null) {
                 sb.append(line);
@@ -67,7 +58,7 @@ public class TasksTest {
 
     @Test
     void taskTwo(){
-        Task taskTwo = new TaskTwo("C://Games");
+        Task taskTwo = new TaskTwo(urlGames);
         String answers = """
                 Файл save0.dat удалён
                 Файл save1.dat удалён
@@ -78,7 +69,7 @@ public class TasksTest {
 
     @Test
     void taskThree(){
-        TaskThree taskThree = new TaskThree("C://Games");
+        TaskThree taskThree = new TaskThree(urlGames);
         List<GameProgress> gameProgresses = new ArrayList<>(
                 List.of(new GameProgress(94, 10, 15, 254.32),
                         new GameProgress(10, 1, 1, 16.0),
