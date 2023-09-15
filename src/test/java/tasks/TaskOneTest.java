@@ -22,7 +22,7 @@ public class TaskOneTest {
         urlGames = tempDir.toFile().getPath();
     }
     @Test
-    void makeTaskTest(){
+    void makeTaskOneTest(){
         TaskOne taskOne = new TaskOne(urlGames);
         Assertions.assertEquals("Информация успешно записана в файл", taskOne.makeTask());
         StringBuilder sb = new StringBuilder();

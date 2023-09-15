@@ -12,6 +12,9 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.nio.file.Path;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
+
 public class TaskTwoTest {
     @TempDir(cleanup = CleanupMode.ALWAYS)
     static
@@ -21,19 +24,27 @@ public class TaskTwoTest {
     static void createTempDirUrl(){
         urlGames = tempDir.toFile().getPath();
     }
+
+    //Hamcrest test
     @Test
-    void taskTwo(){
+    void checkTaskToString(){
         Task taskOne = new TaskOne(urlGames);
         taskOne.makeTask();
         Task taskTwo = new TaskTwo(urlGames);
         String answers = """
-                Файл save0.dat удалён
-                Файл save1.dat удалён
-                Файл save2.dat удалён
+                ФАЙЛ SAVE0.dat удаЛён
+                Файл sAve1.daT удалёН
+                Файл saVe2.Dat Удалён
                 """;
+        assertThat(taskTwo.makeTask(), equalToIgnoringCase(answers));
+    }
+    //JUnit test
+    @Test
+    void makeTaskTwoTest(){
         Assertions.assertFalse(new File(urlGames + "/savegames/save" + 0 + ".dat").exists());
         Assertions.assertFalse(new File(urlGames + "/savegames/save" + 1 + ".dat").exists());
         Assertions.assertFalse(new File(urlGames + "/savegames/save" + 2 + ".dat").exists());
-        Assertions.assertEquals(answers,taskTwo.makeTask());
+
     }
+
 }
